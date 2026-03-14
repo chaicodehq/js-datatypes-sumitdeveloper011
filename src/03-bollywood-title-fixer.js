@@ -37,15 +37,14 @@ export function fixBollywoodTitle(title) {
   if (trimmedTitle === "") {
     return "";
   }
-  const words = trimmedTitle.split(" ");
-  const fixedWords = words.map(word => {
+  const words = trimmedTitle.split(/\s+/);
+  const fixedWords = words.map((word, index) => {
     const lowerWord = word.toLowerCase();
     const exceptions = ["ka", "ki", "ke", "se", "aur", "ya", "the", "of", "in", "a", "an"];
-    if (exceptions.includes(lowerWord)) {
+    if (index > 0 && exceptions.includes(lowerWord)) {
       return lowerWord;
-    } else {
-      return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
     }
+    return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
   });
   return fixedWords.join(" ");
 }

@@ -83,14 +83,17 @@ export function validateForm(formData) {
     errors.phone = "Invalid Indian phone number";
     isValid = false;
   }
-  // Validate age
-  const ageNum = parseInt(age);
-  if (isNaN(ageNum) || ageNum < 16 || ageNum > 100 || !Number.isInteger(ageNum)) {
+  // Validate age (integer: reject decimals like 25.5; allow string "22" via parseInt)
+  const ageNum = parseInt(age, 10);
+  if (isNaN(ageNum) || ageNum < 16 || ageNum > 100) {
+    errors.age = "Age must be an integer between 16 and 100";
+    isValid = false;
+  } else if (typeof age === 'number' && !Number.isInteger(age)) {
     errors.age = "Age must be an integer between 16 and 100";
     isValid = false;
   }
-  // Validate pincode 
-  if (typeof pincode !== 'string' || pincode.length !== 6 || pincode.startsWith('0')) {
+  // Validate pincode: exactly 6 digits, not starting with 0
+  if (typeof pincode !== 'string' || pincode.length !== 6 || pincode.startsWith('0') || !/^\d{6}$/.test(pincode)) {
     errors.pincode = "Invalid Indian pincode";
     isValid = false;
   }
